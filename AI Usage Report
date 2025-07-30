@@ -1,0 +1,36 @@
+🧠 AI Usage Report
+This project leveraged AI tools extensively to boost development speed, ensure scalable architecture, and maintain clean code standards. Below is a detailed breakdown of AI involvement:
+
+🔹 1. Planning & Design
+Used ChatGPT to generate initial project ideas and architecture outlines.
+
+Refined UI layout concepts based on real-time feedback from AI.
+
+🔹 2. Frontend Development
+React components were scaffolded with AI suggestions (e.g., ChatGPT and GitHub Copilot).
+
+AI assisted in generating:
+
+TailwindCSS class combinations
+
+Responsive layouts for dashboard cards and charts
+
+Chart.js configuration examples
+
+🔹 3. Backend Integration
+Express.js boilerplate and route handling were generated with AI help.
+
+Input validation and API structuring were guided by AI to avoid common pitfalls.
+
+🔹 4. AI Integration (OpenAI API)
+Used AI to write prompts for OpenAI queries.
+
+Built natural language query support with help from ChatGPT's response handling advice.
+
+🔹 5. Deployment Troubleshooting
+Solved Vercel and Render deployment issues by debugging error logs with AI assistance.
+
+AI suggested clean folder structure and correct index.html placement.
+
+🔹 6. Documentation
+README file and setup instructions (including this AI Usage Report) were drafted and polished with ChatGPT.
