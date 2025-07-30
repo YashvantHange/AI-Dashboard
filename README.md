@@ -3,7 +3,7 @@
 A visually stunning, full-stack analytics dashboard powered by AI. Built with modern technologies like **Vite + React**, integrated with **OpenAI** and **Express**, and deployed on **Render**. This project was developed with performance, scalability, and clean UI/UX in mind.
 
 ## 🚀 Live Demo
-🌍 [Click here to view the live project](https://your-render-app.onrender.com)  
+🌍 [Click here to view the live project](https://ai-dashboard-nujw.onrender.com/)  
 *(Replace with your actual Render link)*
 
 ---
