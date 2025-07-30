@@ -55,12 +55,21 @@ export const insertClientSchema = createInsertSchema(clients).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  phone: z.string().nullable().optional(),
+  portfolioValue: z.string().nullable().optional(),
+  notes: z.string().nullable().optional(),
 });
 
 export const insertFollowUpSchema = createInsertSchema(followUps).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  scheduledDate: z.union([z.string(), z.date()]).transform((val) => 
+    typeof val === 'string' ? new Date(val) : val
+  ),
+  description: z.string().nullable().optional(),
 });
 
 export const insertMetricSchema = createInsertSchema(metrics).omit({
@@ -70,6 +79,8 @@ export const insertMetricSchema = createInsertSchema(metrics).omit({
 export const insertApiIntegrationSchema = createInsertSchema(apiIntegrations).omit({
   id: true,
   createdAt: true,
+}).extend({
+  description: z.string().nullable().optional(),
 });
 
 export type Client = typeof clients.$inferSelect;

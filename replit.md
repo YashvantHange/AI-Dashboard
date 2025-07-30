@@ -1,8 +1,8 @@
-# CRM Application - Replit.md
+# ADmyBRAND Insights - Digital Marketing Analytics Dashboard
 
 ## Overview
 
-This is a modern client relationship management (CRM) application designed for financial advisors. The application features a full-stack architecture with a React frontend, Express.js backend, and PostgreSQL database. It allows advisors to manage clients, track follow-ups, analyze performance metrics, and integrate with external APIs.
+This is a modern AI-powered analytics dashboard designed for digital marketing agencies. The application features a full-stack architecture with a React frontend, Express.js backend, and PostgreSQL database. It provides comprehensive analytics for marketing campaigns, user tracking, conversion optimization, and platform integrations.
 
 ## User Preferences
 
@@ -35,17 +35,17 @@ Preferred communication style: Simple, everyday language.
 
 ### Database Schema
 The application uses four main entities:
-- **Clients**: Core client information including contact details, investment types, and portfolio values
-- **Follow-ups**: Scheduled interactions with clients (calls, meetings, emails)
-- **Metrics**: Performance tracking data including revenue, client count, and growth metrics
-- **API Integrations**: External service connections for CRM, market data, and email services
+- **Campaigns**: Marketing campaign information including budgets, channels, and performance data
+- **Tasks**: Scheduled campaign optimization and management tasks
+- **Metrics**: Performance tracking data including revenue, user count, conversion rates, and growth metrics
+- **API Integrations**: External service connections for marketing platforms, analytics tools, and automation services
 
 ### Frontend Pages
-- **Dashboard**: Overview with metrics cards, charts, and recent activity
-- **Clients**: Client management with CRUD operations and search functionality
-- **Follow-ups**: Task management for scheduled client interactions
-- **Analytics**: Detailed performance analysis with interactive charts
-- **API Settings**: Configuration for external service integrations
+- **Dashboard**: Overview with key metrics cards (Revenue, Users, Conversions, Growth %), interactive charts, and recent activity
+- **Campaigns**: Marketing campaign management with CRUD operations and performance tracking
+- **Audience**: Task management for campaign optimization and audience engagement
+- **Analytics**: Detailed performance analysis with interactive charts and data visualization
+- **Integrations**: Configuration for external marketing platform connections
 
 ### Shared Components
 - **Layout**: Main layout with responsive sidebar navigation
@@ -107,4 +107,13 @@ The application uses four main entities:
 - `db:push` script for development schema updates
 - Production migrations handled through Drizzle Kit
 
-The application is designed with scalability in mind, using a modular architecture that allows for easy expansion of features and integration with additional external services.
+## Recent Changes (Jan 30, 2025)
+
+- **Rebranded Application**: Transformed from financial advisor CRM to "ADmyBRAND Insights" digital marketing analytics dashboard
+- **Updated Navigation**: Changed menu items to reflect marketing focus (Campaigns, Audience, Integrations)
+- **Enhanced Dashboard Components**: Created revenue trends chart, campaign distribution chart, recent campaigns widget, and platform integrations panel
+- **Marketing-Focused Data**: Updated sample data to reflect marketing campaigns, budgets, and performance metrics
+- **UI Improvements**: Added modern animations, enhanced color scheme, and improved responsive design
+- **Fixed LSP Diagnostics**: Resolved all TypeScript errors and form validation issues
+
+The application is designed with scalability in mind, using a modular architecture that allows for easy expansion of marketing features and integration with additional advertising platforms and analytics tools.

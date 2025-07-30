@@ -1,121 +1,83 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Eye, ExternalLink } from "lucide-react";
 import type { Client } from "@shared/schema";
-import { formatDistanceToNow } from "date-fns";
-
-const clientImages = [
-  "https://images.unsplash.com/photo-1494790108755-2616b612b2c5?ixlib=rb-4.0.3&w=150&h=150&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&w=150&h=150&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&w=150&h=150&fit=crop&crop=face",
-];
 
 export default function RecentClients() {
   const { data: clients, isLoading } = useQuery<Client[]>({
     queryKey: ["/api/clients"],
   });
 
-  const recentClients = clients?.slice(0, 3) || [];
-
-  const getStatusBadge = (status: string) => {
-    const styles = {
-      active: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-      pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-      inactive: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400",
-    };
-    return styles[status as keyof typeof styles] || styles.inactive;
-  };
-
-  const getLastAction = (client: Client) => {
-    switch (client.investmentType) {
-      case 'retirement':
-        return 'Portfolio review scheduled';
-      case 'investment':
-        return 'Investment proposal sent';
-      case 'insurance':
-        return 'Insurance policy updated';
-      default:
-        return 'Recent contact';
-    }
-  };
-
   if (isLoading) {
     return (
-      <Card data-testid="card-recent-clients">
-        <CardHeader>
-          <CardTitle>Recent Clients</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="flex items-center space-x-4">
-              <Skeleton className="w-12 h-12 rounded-full" />
-              <div className="flex-1 space-y-2">
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-3 w-48" />
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="animate-pulse">
+          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
+          <div className="space-y-3">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-16 bg-slate-100 dark:bg-slate-700 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </div>
     );
   }
 
+  const recentClients = clients?.slice(0, 5) || [];
+
   return (
-    <Card data-testid="card-recent-clients">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">
-              Recent Clients
-            </CardTitle>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Latest client interactions
-            </p>
-          </div>
-          <Button 
-            variant="ghost" 
-            className="text-primary hover:text-blue-600 text-sm font-medium"
-            data-testid="button-view-all-clients"
-          >
-            View All
-          </Button>
+    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Recent Campaigns</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Latest marketing campaigns</p>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {recentClients.map((client, index) => (
-            <div 
-              key={client.id} 
-              className="flex items-center space-x-4 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-200"
-              data-testid={`row-client-${client.id}`}
-            >
-              <img 
-                src={clientImages[index] || clientImages[0]}
-                alt={`${client.name} photo`} 
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-slate-900 dark:text-white">
-                  {client.name}
-                </p>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  {getLastAction(client)}
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-500">
-                  {client.lastContact ? formatDistanceToNow(new Date(client.lastContact), { addSuffix: true }) : 'No recent contact'}
-                </p>
-              </div>
-              <div className="text-right">
-                <Badge className={getStatusBadge(client.status)}>
-                  {client.status.charAt(0).toUpperCase() + client.status.slice(1)}
-                </Badge>
+        <Button variant="outline" size="sm">
+          <Eye className="w-4 h-4 mr-2" />
+          View All
+        </Button>
+      </div>
+      
+      <div className="space-y-4">
+        {recentClients.map((client) => (
+          <div 
+            key={client.id} 
+            className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+            data-testid={`campaign-${client.id}`}
+          >
+            <div className="flex-1">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-semibold">
+                  {client.name.charAt(0)}
+                </div>
+                <div>
+                  <h4 className="font-medium text-slate-900 dark:text-white">{client.name}</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">{client.email}</p>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+            
+            <div className="flex items-center space-x-3">
+              <Badge 
+                variant={client.status === 'active' ? 'default' : 'secondary'}
+                className="capitalize"
+              >
+                {client.status}
+              </Badge>
+              <div className="text-right">
+                <p className="font-semibold text-slate-900 dark:text-white">
+                  ${parseFloat(client.portfolioValue || '0').toLocaleString()}
+                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Budget</p>
+              </div>
+              <Button size="sm" variant="ghost">
+                <ExternalLink className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

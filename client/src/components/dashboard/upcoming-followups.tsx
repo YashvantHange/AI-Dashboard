@@ -1,147 +1,89 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, Clock, CheckCircle, Phone, Video } from "lucide-react";
-import type { FollowUp, Client } from "@shared/schema";
-import { format, isToday, isTomorrow, formatDistanceToNow } from "date-fns";
+import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { format } from "date-fns";
+import type { FollowUp } from "@shared/schema";
 
-export default function UpcomingFollowUps() {
-  const { data: followUps, isLoading: followUpsLoading } = useQuery<FollowUp[]>({
+export default function UpcomingFollowups() {
+  const { data: followUps, isLoading } = useQuery<FollowUp[]>({
     queryKey: ["/api/follow-ups/upcoming"],
   });
 
-  const { data: clients } = useQuery<Client[]>({
-    queryKey: ["/api/clients"],
-  });
-
-  const getClientName = (clientId: string) => {
-    return clients?.find(c => c.id === clientId)?.name || "Unknown Client";
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'call':
-        return Phone;
-      case 'meeting':
-        return Video;
-      case 'email':
-        return Calendar;
-      default:
-        return Calendar;
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'call':
-        return 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400';
-      case 'meeting':
-        return 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400';
-      case 'email':
-        return 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400';
-      default:
-        return 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400';
-    }
-  };
-
-  const formatDate = (date: Date) => {
-    if (isToday(date)) return 'Today';
-    if (isTomorrow(date)) return 'Tomorrow';
-    return formatDistanceToNow(date, { addSuffix: true });
-  };
-
-  if (followUpsLoading) {
+  if (isLoading) {
     return (
-      <Card data-testid="card-upcoming-followups">
-        <CardHeader>
-          <CardTitle>Upcoming Follow-ups</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="flex items-start space-x-4 p-3 border rounded-lg">
-              <Skeleton className="w-12 h-12 rounded-lg" />
-              <div className="flex-1 space-y-2">
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-3 w-48" />
-                <Skeleton className="h-3 w-24" />
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="animate-pulse">
+          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
+          <div className="space-y-3">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-20 bg-slate-100 dark:bg-slate-700 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </div>
     );
   }
 
-  const upcomingFollowUps = followUps?.slice(0, 3) || [];
+  const upcomingTasks = followUps?.slice(0, 4) || [];
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
+      case 'low': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+      default: return 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300';
+    }
+  };
 
   return (
-    <Card data-testid="card-upcoming-followups">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">
-              Upcoming Follow-ups
-            </CardTitle>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Scheduled client meetings
-            </p>
-          </div>
-          <Button 
-            variant="ghost" 
-            className="text-primary hover:text-blue-600 text-sm font-medium"
-            data-testid="button-view-calendar"
-          >
-            View Calendar
-          </Button>
+    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Upcoming Tasks</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Campaign optimization tasks</p>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {upcomingFollowUps.map((followUp) => {
-            const TypeIcon = getTypeIcon(followUp.type);
-            const scheduledDate = new Date(followUp.scheduledDate);
+        <Button variant="outline" size="sm">
+          <Calendar className="w-4 h-4 mr-2" />
+          View Calendar
+        </Button>
+      </div>
+      
+      <div className="space-y-4">
+        {upcomingTasks.map((task) => (
+          <div 
+            key={task.id} 
+            className="flex items-start space-x-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+            data-testid={`task-${task.id}`}
+          >
+            <div className="flex-shrink-0 mt-1">
+              <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                <Clock className="w-4 h-4 text-primary" />
+              </div>
+            </div>
             
-            return (
-              <div 
-                key={followUp.id} 
-                className="flex items-start space-x-4 p-3 rounded-lg border border-slate-200 dark:border-slate-700"
-                data-testid={`row-followup-${followUp.id}`}
-              >
-                <div className={`w-12 h-12 ${getTypeColor(followUp.type)} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                  <TypeIcon className="h-5 w-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-slate-900 dark:text-white">
-                    {getClientName(followUp.clientId)}
-                  </p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    {followUp.title}
-                  </p>
-                  <div className="flex items-center mt-2 space-x-4">
-                    <div className="flex items-center text-xs text-slate-500 dark:text-slate-500">
-                      <Clock className="h-3 w-3 mr-1" />
-                      <span>{format(scheduledDate, 'h:mm a')}</span>
-                    </div>
-                    <div className="flex items-center text-xs text-slate-500 dark:text-slate-500">
-                      <Calendar className="h-3 w-3 mr-1" />
-                      <span>{formatDate(scheduledDate)}</span>
-                    </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h4 className="font-medium text-slate-900 dark:text-white mb-1">{task.title}</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">{task.description}</p>
+                  <div className="flex items-center space-x-2">
+                    <Badge className={getPriorityColor(task.priority)}>
+                      {task.priority}
+                    </Badge>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                      {format(new Date(task.scheduledDate), 'MMM d, h:mm a')}
+                    </span>
                   </div>
                 </div>
-                <Button 
-                  size="sm" 
-                  variant="ghost" 
-                  className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 p-1"
-                  data-testid={`button-complete-followup-${followUp.id}`}
-                >
-                  <CheckCircle className="h-5 w-5" />
+                <Button size="sm" variant="ghost">
+                  <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

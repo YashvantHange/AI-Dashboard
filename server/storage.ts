@@ -45,44 +45,44 @@ export class MemStorage implements IStorage {
   }
 
   private initializeData() {
-    // Sample clients
+    // Sample marketing campaigns data
     const sampleClients: Client[] = [
       {
         id: randomUUID(),
-        name: "Sarah Johnson",
-        email: "sarah.johnson@email.com",
+        name: "Summer Fashion Campaign",
+        email: "campaigns@fashionbrand.com",
         phone: "+1-555-0123",
         status: "active",
         investmentType: "retirement",
-        portfolioValue: "250000.00",
+        portfolioValue: "25000.00",
         lastContact: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-        notes: "Interested in expanding retirement portfolio",
+        notes: "High-performing social media campaign targeting Gen Z",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: randomUUID(),
-        name: "Michael Chen",
-        email: "michael.chen@email.com",
+        name: "Tech Product Launch",
+        email: "launch@techstartup.com",
         phone: "+1-555-0124",
         status: "pending",
         investmentType: "investment",
-        portfolioValue: "450000.00",
+        portfolioValue: "45000.00",
         lastContact: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
-        notes: "Reviewing investment proposal",
+        notes: "B2B campaign requiring optimization",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: randomUUID(),
-        name: "Emily Rodriguez",
-        email: "emily.rodriguez@email.com",
+        name: "Holiday Sale Campaign",
+        email: "holidays@retailstore.com",
         phone: "+1-555-0125",
         status: "active",
         investmentType: "insurance",
-        portfolioValue: "180000.00",
+        portfolioValue: "18000.00",
         lastContact: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
-        notes: "Updated life insurance policy",
+        notes: "Seasonal email marketing campaign",
         createdAt: new Date(),
         updatedAt: new Date(),
       }
@@ -107,8 +107,8 @@ export class MemStorage implements IStorage {
       {
         id: randomUUID(),
         clientId: Array.from(this.clients.keys())[0],
-        title: "Quarterly portfolio review",
-        description: "Review Q4 performance and discuss 2024 strategy",
+        title: "Campaign performance review",
+        description: "Analyze Q4 metrics and optimize targeting strategy",
         scheduledDate: tomorrow,
         type: "meeting",
         status: "pending",
@@ -119,8 +119,8 @@ export class MemStorage implements IStorage {
       {
         id: randomUUID(),
         clientId: Array.from(this.clients.keys())[1],
-        title: "Investment strategy call",
-        description: "Discuss new investment opportunities",
+        title: "Launch strategy call",
+        description: "Discuss product launch timeline and budget allocation",
         scheduledDate: friday,
         type: "call",
         status: "pending",
@@ -131,8 +131,8 @@ export class MemStorage implements IStorage {
       {
         id: randomUUID(),
         clientId: Array.from(this.clients.keys())[2],
-        title: "New client onboarding",
-        description: "Complete onboarding process and documentation",
+        title: "Campaign optimization",
+        description: "Implement A/B testing for holiday campaigns",
         scheduledDate: nextMonday,
         type: "meeting",
         status: "pending",
@@ -211,6 +211,11 @@ export class MemStorage implements IStorage {
     const client: Client = {
       ...insertClient,
       id,
+      phone: insertClient.phone || null,
+      status: insertClient.status || 'active',
+      portfolioValue: insertClient.portfolioValue || null,
+      lastContact: insertClient.lastContact || null,
+      notes: insertClient.notes || null,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -258,6 +263,9 @@ export class MemStorage implements IStorage {
     const followUp: FollowUp = {
       ...insertFollowUp,
       id,
+      status: insertFollowUp.status || 'pending',
+      description: insertFollowUp.description || null,
+      priority: insertFollowUp.priority || 'medium',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -299,6 +307,7 @@ export class MemStorage implements IStorage {
     const metric: Metric = {
       ...insertMetric,
       id,
+      monthlyData: insertMetric.monthlyData || null,
     };
     this.metrics.set(id, metric);
     return metric;
@@ -314,6 +323,10 @@ export class MemStorage implements IStorage {
     const integration: ApiIntegration = {
       ...insertIntegration,
       id,
+      status: insertIntegration.status || 'disconnected',
+      description: insertIntegration.description || null,
+      configuration: insertIntegration.configuration || null,
+      lastSync: insertIntegration.lastSync || null,
       createdAt: new Date(),
     };
     this.apiIntegrations.set(id, integration);

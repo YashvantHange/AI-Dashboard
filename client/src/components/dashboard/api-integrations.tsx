@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Database, TrendingUp, Mail, Settings, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Settings, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import type { ApiIntegration } from "@shared/schema";
 
 export default function ApiIntegrations() {
@@ -11,137 +9,88 @@ export default function ApiIntegrations() {
     queryKey: ["/api/integrations"],
   });
 
-  const getIcon = (type: string) => {
-    switch (type) {
-      case 'crm':
-        return Database;
-      case 'market_data':
-        return TrendingUp;
-      case 'email':
-        return Mail;
-      default:
-        return Database;
-    }
-  };
-
-  const getIconColor = (type: string) => {
-    switch (type) {
-      case 'crm':
-        return 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400';
-      case 'market_data':
-        return 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400';
-      case 'email':
-        return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400';
-      default:
-        return 'bg-gray-100 dark:bg-gray-900/30 text-gray-600 dark:text-gray-400';
-    }
-  };
-
-  const getStatusBadge = (status: string) => {
-    const styles = {
-      connected: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-      disconnected: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-      error: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    };
-    return styles[status as keyof typeof styles] || styles.disconnected;
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'connected':
-        return 'Connected';
-      case 'disconnected':
-        return 'Setup Required';
-      case 'error':
-        return 'Error';
-      default:
-        return 'Unknown';
-    }
-  };
-
   if (isLoading) {
     return (
-      <Card data-testid="card-api-integrations">
-        <CardHeader>
-          <CardTitle>API Integrations</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="animate-pulse">
+          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/3 mb-4"></div>
+          <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-32 w-full" />
+              <div key={i} className="h-16 bg-slate-100 dark:bg-slate-700 rounded"></div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'connected':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'error':
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      case 'warning':
+        return <AlertCircle className="w-4 h-4 text-yellow-500" />;
+      default:
+        return <XCircle className="w-4 h-4 text-slate-400" />;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'connected':
+        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+      case 'error':
+        return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
+      case 'warning':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
+      default:
+        return 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300';
+    }
+  };
+
   return (
-    <Card data-testid="card-api-integrations">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">
-              API Integrations
-            </CardTitle>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Manage your custom integrations and data connections
-            </p>
-          </div>
-          <Button 
-            className="flex items-center space-x-2 bg-primary text-white hover:bg-blue-600"
-            data-testid="button-new-integration"
+    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Platform Integrations</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Connected marketing platforms</p>
+        </div>
+        <Button variant="outline" size="sm">
+          <Settings className="w-4 h-4 mr-2" />
+          Manage
+        </Button>
+      </div>
+      
+      <div className="space-y-3">
+        {integrations?.map((integration) => (
+          <div 
+            key={integration.id} 
+            className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg"
+            data-testid={`integration-${integration.id}`}
           >
-            <Plus className="h-4 w-4" />
-            <span>New Integration</span>
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {integrations?.map((integration) => {
-            const Icon = getIcon(integration.type);
-            
-            return (
-              <div 
-                key={integration.id} 
-                className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg"
-                data-testid={`card-integration-${integration.id}`}
-              >
-                <div className="flex items-center space-x-3 mb-3">
-                  <div className={`w-10 h-10 ${getIconColor(integration.type)} rounded-lg flex items-center justify-center`}>
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-slate-900 dark:text-white">
-                      {integration.name}
-                    </h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 capitalize">
-                      {integration.status}
-                    </p>
-                  </div>
-                </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
-                  {integration.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <Badge className={getStatusBadge(integration.status)}>
-                    {getStatusText(integration.status)}
-                  </Badge>
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
-                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1"
-                    data-testid={`button-settings-${integration.id}`}
-                  >
-                    <Settings className="h-4 w-4" />
-                  </Button>
-                </div>
+            <div className="flex items-center space-x-3">
+              {getStatusIcon(integration.status)}
+              <div>
+                <h4 className="font-medium text-slate-900 dark:text-white">{integration.name}</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">{integration.type}</p>
               </div>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
+            </div>
+            
+            <div className="flex items-center space-x-3">
+              <Badge className={getStatusColor(integration.status)}>
+                {integration.status}
+              </Badge>
+              {integration.lastSync && (
+                <span className="text-xs text-slate-500 dark:text-slate-400">
+                  Last sync: {new Date(integration.lastSync).toLocaleDateString()}
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

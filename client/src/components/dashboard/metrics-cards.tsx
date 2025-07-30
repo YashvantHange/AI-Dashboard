@@ -19,7 +19,7 @@ export default function MetricsCards({ metrics }: MetricsCardsProps) {
       iconColor: "text-emerald-600 dark:text-emerald-400",
     },
     {
-      title: "Active Clients",
+      title: "Active Users",
       value: metrics.activeClients.toLocaleString(),
       change: "+8.2%",
       icon: Users,
@@ -27,7 +27,7 @@ export default function MetricsCards({ metrics }: MetricsCardsProps) {
       iconColor: "text-blue-600 dark:text-blue-400",
     },
     {
-      title: "Conversion Rate",
+      title: "Conversions",
       value: `${metrics.conversionRate}%`,
       change: "+3.1%",
       icon: TrendingUp,
@@ -35,7 +35,7 @@ export default function MetricsCards({ metrics }: MetricsCardsProps) {
       iconColor: "text-purple-600 dark:text-purple-400",
     },
     {
-      title: "Portfolio Growth",
+      title: "Growth %",
       value: `${metrics.portfolioGrowth}%`,
       change: "+2.4%",
       icon: PieChart,
